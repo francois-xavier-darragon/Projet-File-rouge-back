@@ -2,8 +2,11 @@
 
 namespace App\Entity;
 
+use App\Entity\Trait\SoftDeletableTrait;
 use App\Entity\Trait\TimestampableTrait;
 use App\Repository\RestaurantRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -11,6 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Restaurant
 {
     use TimestampableTrait;
+    use SoftDeletableTrait;
     
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -31,6 +35,14 @@ class Restaurant
 
     #[ORM\Column]
     private ?int $maxGuest = 0;
+
+    #[ORM\OneToMany(targetEntity: Image::class, mappedBy: 'restaurant')]
+    private Collection $images;
+
+    public function __construct()
+    {
+        $this->images = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -93,6 +105,36 @@ class Restaurant
     public function setMaxGuest(int $maxGuest): static
     {
         $this->maxGuest = $maxGuest;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Image>
+     */
+    public function getImages(): Collection
+    {
+        return $this->images;
+    }
+
+    public function addImage(Image $image): static
+    {
+        if (!$this->images->contains($image)) {
+            $this->images->add($image);
+            $image->setRestaurant($this);
+        }
+
+        return $this;
+    }
+
+    public function removeImage(Image $image): static
+    {
+        if ($this->images->removeElement($image)) {
+            // set the owning side to null (unless already changed)
+            if ($image->getRestaurant() === $this) {
+                $image->setRestaurant(null);
+            }
+        }
 
         return $this;
     }
