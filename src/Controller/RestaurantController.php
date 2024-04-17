@@ -5,7 +5,9 @@ namespace App\Controller;
 use App\Entity\Restaurant;
 use App\Repository\RestaurantRepository;
 use DateTimeImmutable;
-use phpDocumentor\Reflection\DocBlock\Tags\See;
+use Nelmio\ApiDocBundle\Annotation\Model;
+use Nelmio\ApiDocBundle\Annotation\Security;
+use OpenApi\Annotations as OA;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -18,7 +20,6 @@ use Symfony\Component\Serializer\SerializerInterface;
 #[Route('/api/restaurant', name: 'app_api_restaurant')]
 class RestaurantController extends AbstractController
 {
-
     public function __construct(
         private SerializerInterface $serializerInterface,
         private RestaurantRepository $restaurantRepository,

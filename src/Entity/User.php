@@ -42,17 +42,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private array $roles = [];
 
-    /** @throws \Exception */
-    public function __construct()
-    {
-        $this->apiToken = bin2hex(random_bytes(20));
-    }
-
     /**
      * @var string The hashed password
      */
     #[ORM\Column]
     private ?string $password = null;
+    
+    /** @throws \Exception */
+    public function __construct()
+    {
+        $this->apiToken = bin2hex(random_bytes(20));
+    }
 
     public function getId(): ?int
     {
@@ -170,5 +170,25 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
+    }
+
+    /**
+     * Get the value of apiToken
+     */ 
+    public function getApiToken()
+    {
+        return $this->apiToken;
+    }
+
+    /**
+     * Set the value of apiToken
+     *
+     * @return  self
+     */ 
+    public function setApiToken($apiToken)
+    {
+        $this->apiToken = $apiToken;
+
+        return $this;
     }
 }
