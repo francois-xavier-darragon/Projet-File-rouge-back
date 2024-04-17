@@ -61,7 +61,11 @@ class SecurityController extends AbstractController
         $this->manager->flush();
 
         return new JsonResponse(
-            ['user'  => $user->getUserIdentifier(), 'apiToken' => $user->getApiToken(), 'roles' => $user->getRoles()],
+            [
+                'user'  => $user->getUserIdentifier(), 
+                'apiToken' => $user->getApiToken(), 
+                'roles' => $user->getRoles()
+            ],
             Response::HTTP_CREATED
         );
     }
@@ -93,15 +97,22 @@ class SecurityController extends AbstractController
      */
     public function login(#[CurrentUser] ?User $user): JsonResponse
     {
+       
         if (null === $user) {
-            return new JsonResponse(['message' => 'Missing credentials'], Response::HTTP_UNAUTHORIZED);
+            return new JsonResponse(
+                [
+                    'message' => 'Missing credentials'
+                ],
+                Response::HTTP_UNAUTHORIZED);
         }
 
-        return new JsonResponse([
-            'user'  => $user->getUserIdentifier(),
-            'apiToken' => $user->getApiToken(),
-            'roles' => $user->getRoles(),
-        ]);
+        return new JsonResponse(
+            [
+                'user'  => $user->getUserIdentifier(),
+                'apiToken' => $user->getApiToken(),
+                'roles' => $user->getRoles(),
+            ],
+            Response::HTTP_OK);
     }
 
     #[Route('/account/me', name: 'me', methods: 'GET')]
