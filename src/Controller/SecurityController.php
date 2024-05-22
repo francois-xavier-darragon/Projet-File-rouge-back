@@ -54,6 +54,7 @@ class SecurityController extends AbstractController
     public function register(Request $request): JsonResponse
     {
         $user = $this->serializer->deserialize($request->getContent(), User::class, 'json');
+        
         $user->setPassword($this->passwordHasher->hashPassword($user, $user->getPassword()));
         $user->setCreatedAt(new DateTimeImmutable());
 
@@ -62,8 +63,8 @@ class SecurityController extends AbstractController
 
         return new JsonResponse(
             [
-                'user'  => $user->getUserIdentifier(), 
-                'apiToken' => $user->getApiToken(), 
+                'user'  => $user->getUserIdentifier(),
+                'apiToken' => $user->getApiToken(),
                 'roles' => $user->getRoles()
             ],
             Response::HTTP_CREATED
@@ -97,7 +98,6 @@ class SecurityController extends AbstractController
      */
     public function login(#[CurrentUser] ?User $user): JsonResponse
     {
-       
         if (null === $user) {
             return new JsonResponse(
                 [

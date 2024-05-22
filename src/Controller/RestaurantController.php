@@ -17,7 +17,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Serializer\SerializerInterface;
 
-#[Route('/api/restaurant', name: 'app_api_restaurant')]
+#[Route('/api/restaurant', name: 'app_api_restaurant_')]
 class RestaurantController extends AbstractController
 {
     public function __construct(
@@ -104,15 +104,15 @@ class RestaurantController extends AbstractController
      *     )
      * )
      */
-    #[Route('/{id}', name: 'show', methods: 'GET')]
+    #[Route('/{id}/show', name: 'show', methods: 'GET')]
     public function show(int $id): JsonResponse
     {
         $restaurant = $this->restaurantRepository->findOneBy(['id' => $id]);
         if ($restaurant) {
             $responseData = $this->serializerInterface->serialize($restaurant, 'json');
 
-                return new JsonResponse($responseData, Response::HTTP_OK, 
-                [], 
+                return new JsonResponse($responseData, Response::HTTP_OK,
+                [],
                 true
             );
         }
@@ -149,7 +149,7 @@ class RestaurantController extends AbstractController
      *     )
      * )
      */
-    #[Route('/{id}', name: 'edit', methods: 'PUT')]
+    #[Route('/{id}/edit', name: 'edit', methods: 'PUT')]
     public function edit(int $id, Request $request): JsonResponse
     {
         $restaurant = $this->restaurantRepository->findOneBy(['id' => $id]);
@@ -189,7 +189,7 @@ class RestaurantController extends AbstractController
      *     )
      * )
      */
-    #[Route('/{id}', name: 'delete', methods: 'DELETE')]
+    #[Route('/{id}/delete', name: 'delete', methods: 'DELETE')]
     public function delete(int $id): JsonResponse
     {
         $restaurant = $this->restaurantRepository->findOneBy(['id' => $id]);
